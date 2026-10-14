@@ -13,3 +13,6 @@
 }
 #page-generate .results>.generate{display:block;margin:0 0 20px}
 #page-generate .results>.section-heading{margin-top:0}
+
+/* QR main-lens scan assist */
+.qr-camera-box{position:relative;overflow:hidden;border-radius:12px}.qr-camera-box video{width:100%;max-height:none;aspect-ratio:4/3;object-fit:cover;display:block;margin-bottom:10px}.qr-camera-box video[hidden]{display:none}.qr-target{position:absolute;inset:17% 21%;border:2px solid #ffffffee;border-radius:15px;box-shadow:0 0 0 999px #00000012;pointer-events:none}.qr-camera-box:has(video[hidden]) .qr-target{display:none}.qr-zoom-wrap{display:flex;align-items:center;gap:12px;font-size:12px;color:#536783;margin:8px 0}.qr-zoom-wrap[hidden]{display:none}.qr-zoom-wrap input{flex:1;min-width:0}

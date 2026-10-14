@@ -18,8 +18,17 @@ export function generateFiltered({pool=ALL,fixed=[],excluded=[],odd=null,rand=ra
 export function shuffle(input,rand=randomInt){const a=[...input];for(let i=a.length-1;i>0;i--){const j=rand(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
 export function generateBatch({counts,mode='mixed',gameCount=3,fixed=[],excluded=[],odd=null,rand=randomInt}){
  if(![1,3,5].includes(gameCount)||!['mixed','random','semi'].includes(mode))throw Error('생성 옵션 오류');
- const rank=rankNumbers(counts);const pools=mode==='mixed'?[ALL,rank.hot,rank.cold]:Array(gameCount).fill(ALL);
+ const rank=rankNumbers(counts);const pools=mode==='mixed'?[ALL,rank.descending.map(x=>x.number),[...rank.values].sort((a,b)=>a.count-b.count||a.number-b.number).map(x=>x.number)]:Array(gameCount).fill(ALL);
  const labels=mode==='mixed'?['완전 랜덤','HOT 번호','COLD 번호']:Array.from({length:gameCount},()=>mode==='semi'?'반자동':'완전 랜덤');
  const count=mode==='mixed'?3:gameCount;
- return Array.from({length:count},(_,i)=>({label:labels[i],numbers:generateFiltered({pool:pools[i],fixed,excluded,odd,rand})}));
+ return Array.from({length:count},(_,i)=>{
+  if(mode!=='mixed'||i===0)return {label:labels[i],numbers:generateFiltered({pool:pools[i],fixed,excluded,odd,rand})};
+  // HOT/COLD: 15개 후보부터 시작하되 고정·제외·홀짝 제약으로 부족하면 다음 순위까지 확장.
+  // 고정 번호는 랭킹 밖이어도 반드시 포함하며, 전체 45개에서도 불가능한 설정만 거절.
+  for(let size=15;size<=45;size++){
+   const pool=[...new Set([...pools[i].slice(0,size),...fixed])];
+   try{return {label:labels[i],numbers:generateFiltered({pool,fixed,excluded,odd,rand})}}
+   catch(e){if(size===45)throw e}
+  }
+ });
 }

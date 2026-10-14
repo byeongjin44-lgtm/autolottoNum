@@ -6,7 +6,7 @@ const pause=ms=>new Promise(r=>setTimeout(r,ms));
 export function normalize(item){
  const raw=String(item.ltRflYmd||'').replace(/\D/g,'');
  const date=raw.length===8?`${raw.slice(0,4)}-${raw.slice(4,6)}-${raw.slice(6)}`:'';
- return {round:Number(item.ltEpsd),date,numbers:[1,2,3,4,5,6].map(i=>Number(item[`tm${i}WnNo`])),bonus:Number(item.bnsWnNo),firstPrize:Number(item.rnk1SumWnAmt),firstWinners:Number(item.rnk1WnNope)};
+ return {round:Number(item.ltEpsd),date,numbers:[1,2,3,4,5,6].map(i=>Number(item[`tm${i}WnNo`])),bonus:Number(item.bnsWnNo),firstPrize:Number(item.rnk1WnNope)>0?Math.floor(Number(item.rnk1SumWnAmt)/Number(item.rnk1WnNope)):0,firstWinners:Number(item.rnk1WnNope)};
 }
 export function validateDraw(d){
  if(!d||!Number.isInteger(d.round)||d.round<1||!/^\d{4}-\d{2}-\d{2}$/.test(d.date)||Number.isNaN(Date.parse(d.date+'T00:00:00Z'))||!Array.isArray(d.numbers)||d.numbers.length!==6||d.numbers.some(n=>!Number.isInteger(n)||n<1||n>45)||new Set(d.numbers).size!==6||!Number.isInteger(d.bonus)||d.bonus<1||d.bonus>45||d.numbers.includes(d.bonus)||!Number.isSafeInteger(d.firstPrize)||d.firstPrize<0||!Number.isInteger(d.firstWinners)||d.firstWinners<0)throw Error('유효하지 않은 회차: '+(d?.round??'?'));
