@@ -1,16 +1,16 @@
 {
-  "round": 1245,
-  "date": "2026-10-10",
+  "round": 1251,
+  "date": "2026-11-21",
   "numbers": [
-    4,
-    5,
-    25,
-    28,
-    32,
-    42
+    14,
+    18,
+    19,
+    29,
+    40,
+    45
   ],
-  "bonus": 12,
-  "firstPrize": 3006515775,
-  "firstWinners": 10,
+  "bonus": 1,
+  "firstPrize": 2068843286,
+  "firstWinners": 14,
   "source": "https://www.dhlottery.co.kr/lt645/intro"
 }
